@@ -117,6 +117,92 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
+        if (0 === strpos($pathinfo, '/empresa')) {
+            // app_empresa_list
+            if ('/empresa' === $pathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_app_empresa_list;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::listAction',  '_route' => 'app_empresa_list',);
+            }
+            not_app_empresa_list:
+
+            if (0 === strpos($pathinfo, '/empresa/create')) {
+                // app_empresa_create
+                if ('/empresa/create' === $pathinfo) {
+                    if ('GET' !== $canonicalMethod) {
+                        $allow[] = 'GET';
+                        goto not_app_empresa_create;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::createAction',  '_route' => 'app_empresa_create',);
+                }
+                not_app_empresa_create:
+
+                // app_empresa_createprocess
+                if ('/empresa/create' === $pathinfo) {
+                    if ('POST' !== $canonicalMethod) {
+                        $allow[] = 'POST';
+                        goto not_app_empresa_createprocess;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::createProcessAction',  '_route' => 'app_empresa_createprocess',);
+                }
+                not_app_empresa_createprocess:
+
+            }
+
+            elseif (0 === strpos($pathinfo, '/empresa/update')) {
+                // app_empresa_update
+                if (preg_match('#^/empresa/update/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                    if ('GET' !== $canonicalMethod) {
+                        $allow[] = 'GET';
+                        goto not_app_empresa_update;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_empresa_update')), array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::updateAction',));
+                }
+                not_app_empresa_update:
+
+                // app_empresa_updateprocess
+                if (preg_match('#^/empresa/update/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                    if ('PATCH' !== $canonicalMethod) {
+                        $allow[] = 'PATCH';
+                        goto not_app_empresa_updateprocess;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_empresa_updateprocess')), array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::updateProcessAction',));
+                }
+                not_app_empresa_updateprocess:
+
+            }
+
+            // app_empresa_read
+            if (preg_match('#^/empresa/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_app_empresa_read;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_empresa_read')), array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::readAction',));
+            }
+            not_app_empresa_read:
+
+            // app_empresa_delete
+            if (0 === strpos($pathinfo, '/empresa/delete') && preg_match('#^/empresa/delete/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_app_empresa_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_empresa_delete')), array (  '_controller' => 'AppBundle\\Controller\\EmpresaController::deleteAction',));
+            }
+            not_app_empresa_delete:
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

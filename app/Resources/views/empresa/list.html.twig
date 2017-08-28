@@ -1,0 +1,43 @@
+{% extends 'ArcaSolutionsTesteAppBundle:Empresa:index.html.twig' %}
+
+{% block body %}
+    {% spaceless %}
+        {{ parent() }}
+        Empresas
+        <hr />
+        {% if empresaArray is defined and empresaArray|length != 0 %}
+            <table border="1px">
+                <tr>
+                    <td>#</td>
+                    <td>ID</td>
+                    <td>TITULO</td>
+                    <td>TELEFONE</td>
+                    <td>ENDERECO</td>
+                    <td>CEP</td>
+                    <td>CIDADE</td>
+                    <td>ESTADO</td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                {% for empresa in empresaArray %}
+                    <tr>
+                        <td class="head">{{ loop.index }}</td>
+                        <td>{{ empresa.id }}</td>
+                        <td>{{ empresa.titulo }}</td>
+                        <td>{{ empresa.telefone }}</td>
+                        <td>{{ empresa.endereco }}</td>
+                        <td>{{ empresa.cep }}</td>
+                        <td>{{ empresa.cidade }}</td>
+                        <td>{{ empresa.estado }}</td>
+                        <td><a href="{{ path('arcasolutionsteste_frontend_empresa_read', {'id':empresa.id}) }}">view</a></td>
+                        <td><a href="{{ path('arcasolutionsteste_frontend_empresa_delete', {'id':empresa.id}) }}">delete</a></td>
+                        <td><a href="{{ path('arcasolutionsteste_frontend_empresa_update', {'id':empresa.id}) }}">update</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            Não há empresas cadastradas !
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

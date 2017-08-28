@@ -8845,7 +8845,7 @@ $this->saveCacheFile($path, $annot);
 return $this->loadedAnnotations[$key] = $annot;
 }
 if ($this->debug
-&& (false !== $filename = $class->getFilename())
+&& (false !== $filename = $class->getFileName())
 && filemtime($path) < filemtime($filename)) {
 @unlink($path);
 $annot = $this->reader->getClassAnnotations($class);
@@ -8915,6 +8915,7 @@ $tempfile = tempnam($this->dir, uniqid('', true));
 if (false === $tempfile) {
 throw new \RuntimeException(sprintf('Unable to create tempfile in directory: %s', $this->dir));
 }
+@chmod($tempfile, 0666 & (~$this->umask));
 $written = file_put_contents($tempfile,'<?php return unserialize('.var_export(serialize($data), true).');');
 if (false === $written) {
 throw new \RuntimeException(sprintf('Unable to write cached file to: %s', $tempfile));
@@ -8971,7 +8972,7 @@ public function parseClass(\ReflectionClass $class)
 if (method_exists($class,'getUseStatements')) {
 return $class->getUseStatements();
 }
-if (false === $filename = $class->getFilename()) {
+if (false === $filename = $class->getFileName()) {
 return array();
 }
 $content = $this->getFileContent($filename, $class->getStartLine());
@@ -9802,9 +9803,10 @@ $callback = function () use ($templating, $template, $parameters) {
 return $templating->stream($template->getTemplate(), $parameters);
 };
 $event->setResponse(new StreamedResponse($callback));
+} else {
+$event->setResponse($templating->renderResponse($template->getTemplate(), $parameters));
 }
 $template->setOwner(array());
-$event->setResponse($templating->renderResponse($template->getTemplate(), $parameters));
 }
 public static function getSubscribedEvents()
 {

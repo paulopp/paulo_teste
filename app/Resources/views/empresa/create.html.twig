@@ -1,0 +1,25 @@
+{% extends 'ArcaSolutionsTesteAppBundle:Empresa:index.html.twig' %}
+
+{% block body %}
+    {% spaceless %}
+        {{ parent() }}
+        EMPRESA - Cadastrar Nova
+        <hr />
+        {{ form_start(form) }}
+            {% if form_errors(form) != '' %} 
+                {{ form_errors(form) }}
+             {% endif %}
+
+            <p>TITULO: {{ form_widget(form.titulo) }}</p>
+            <p>TELEFONE: {{ form_widget(form.telefone) }}</p>
+            <p>ENDEREÇO: {{ form_widget(form.endereco) }}</p>
+            <p>CEP: {{ form_widget(form.cep) }}</p>
+            <p>CIDADE: {{ form_widget(form.cidade) }}</p>
+            <p>ESTADO: {{ form_widget(form.estado) }}</p>
+            <p>DESCRIÇÃO: {{ form_widget(form.descricao) }}</p>
+            <p>CATEGORIA(S): {{ form_widget(form.categorias) }}</p>
+
+            <p><button name="button">Submit</button></p>
+        {{ form_end(form) }}
+    {% endspaceless %}
+{% endblock %}

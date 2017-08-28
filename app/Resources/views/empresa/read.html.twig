@@ -1,0 +1,29 @@
+{% extends 'ArcaSolutionsTesteAppBundle:Empresa:index.html.twig' %}
+
+{% block body %}
+    {% spaceless %}
+        {{ parent() }}
+        COUNTRY - Read
+        <hr />
+        <table border="1px">
+            <tr>
+                <td>ID</td>
+                <td>TITULO</td>
+                <td>TELEFONE</td>
+                <td>ENDERECO</td>
+                <td>CEP</td>
+                <td>CIDADE</td>
+                <td>ESTADO</td>
+            </tr>
+            <tr>
+                <td>{{ empresa.id }}</td>
+                <td>{{ empresa.titulo }}</td>
+                <td>{{ empresa.telefone }}</td>
+                <td>{{ empresa.endereco }}</td>
+                <td>{{ empresa.cep }}</td>
+                <td>{{ empresa.cidade }}</td>
+                <td>{{ empresa.estado }}</td>
+            </tr>
+        </table>
+    {% endspaceless %}
+{% endblock %}
