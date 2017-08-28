@@ -8,6 +8,7 @@ class ComposerStaticInit971b5e6116b27919d64e874daadd79b3
 {
     public static $files = array (
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
+        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -43,6 +44,10 @@ class ComposerStaticInit971b5e6116b27919d64e874daadd79b3
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
         ),
+        'R' => 
+        array (
+            'React\\Promise\\' => 14,
+        ),
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
@@ -59,9 +64,20 @@ class ComposerStaticInit971b5e6116b27919d64e874daadd79b3
         array (
             'Incenteev\\ParameterHandler\\' => 27,
         ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Stream\\' => 18,
+            'GuzzleHttp\\Ring\\' => 16,
+        ),
         'F' => 
         array (
             'Fig\\Link\\' => 9,
+            'FOS\\ElasticaBundle\\' => 19,
+        ),
+        'E' => 
+        array (
+            'Elasticsearch\\' => 14,
+            'Elastica\\' => 9,
         ),
         'D' => 
         array (
@@ -155,6 +171,10 @@ class ComposerStaticInit971b5e6116b27919d64e874daadd79b3
         array (
             0 => __DIR__ . '/..' . '/sensio/distribution-bundle',
         ),
+        'React\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/promise/src',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -183,9 +203,29 @@ class ComposerStaticInit971b5e6116b27919d64e874daadd79b3
         array (
             0 => __DIR__ . '/..' . '/incenteev/composer-parameter-handler',
         ),
+        'GuzzleHttp\\Stream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/streams/src',
+        ),
+        'GuzzleHttp\\Ring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/ringphp/src',
+        ),
         'Fig\\Link\\' => 
         array (
             0 => __DIR__ . '/..' . '/fig/link-util/src',
+        ),
+        'FOS\\ElasticaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofsymfony/elastica-bundle',
+        ),
+        'Elasticsearch\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/elasticsearch/elasticsearch/src/Elasticsearch',
+        ),
+        'Elastica\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ruflin/elastica/lib/Elastica',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

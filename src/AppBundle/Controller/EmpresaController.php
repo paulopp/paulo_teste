@@ -36,7 +36,54 @@
             $repo = $this->getDoctrine()->getRepository('ArcaSolutionsTesteAppBundle:Empresa');
 
             return $this->getFormView('list', ['empresaArray' => $repo->findAll()]);
+            
         }
+        
+        
+        public function listPesquisaElasticAction(Request $request)
+        {
+            
+            // Argumento de pesquisa:
+            $form->bindRequest($request);
+            $data = $form->getValues();
+            $argumentoPesq = $data->getBusca();
+            
+            
+            $empresaSearch = new \AppBundle\Model\EmpresaSearch();
+            
+            $empresaSearchForm = $this->get('form.factory')
+                ->createNamed(
+                    '',
+                    'empresa_search_type',
+                    $empresaSearch,
+                    array(
+                        'action' => $this->generateUrl('arcasolutionsteste-empresa-search'),
+                        'method' => 'GET'
+                    )
+                );
+            $empresaSearchForm->handleRequest($request);
+            $empresaSearch = $empresaSearchForm->getData();
+            
+            // Armazena o arg de pesquisa nos aributos de busca:
+            $argumentoPesq = $empresaSearch->getBusca();
+            if ($argumentoPesq != null) {
+                $empresaSearch->setTitulo($argumentoPesq);
+                $empresaSearch->setEndereco($argumentoPesq);
+                $empresaSearch->setCep($argumentoPesq);
+                $empresaSearch->setCidade($argumentoPesq);
+                $empresaSearch->setCategoria($argumentoPesq);
+            }
+
+            
+            $elasticaManager = $this->container->get('fos_elastica.manager');
+            $results = $elasticaManager->getRepository('ArcaSolutionsTesteAppBundle:Empresa')->search($empresaSearch);
+
+            return $this->render('ArcaSolutionsTesteAppBundle:Empresa:list.html.twig',array(
+                'results' => $results,
+                'empresaSearchForm' => $empresaSearchForm->createView(),
+            ));
+        }
+        
 
         /**
          * Create page.

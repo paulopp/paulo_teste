@@ -10,3 +10,5 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: fc67968f424e497a979581d205dcc0e579d1d0b7
+    elastic_host : localhost
+    elastic_port : 9200

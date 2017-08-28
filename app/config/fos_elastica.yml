@@ -1,0 +1,25 @@
+fos_elastica:
+    clients:
+        default: { host: %elastic_host%, port: %elastic_port% }
+    indexes:
+        app:
+            client: default
+            types:
+                empresa:
+                    properties:
+                        id:
+                            type: integer
+                        titulo : ~
+                        telefone : ~
+                        endereco : ~
+                        cep : ~
+                        cidade : ~
+                        estado : ~
+                        descricao : ~
+                    persistence:
+                        driver: orm
+                        model: ArcaSolutionsTeste\AppBundle\Entity\Empresa
+                        finder: ~
+                        provider: ~
+                        listener: ~
+                    

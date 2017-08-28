@@ -38,6 +38,7 @@ class appDevDebugProjectContainer extends Container
             'appbundle\\controller\\empresacontroller' => 'AppBundle\\Controller\\EmpresaController',
             'appbundle\\form\\type\\categoriaempresatype' => 'AppBundle\\Form\\Type\\CategoriaEmpresaType',
             'appbundle\\form\\type\\categoriatype' => 'AppBundle\\Form\\Type\\CategoriaType',
+            'appbundle\\form\\type\\empresasearchtype' => 'AppBundle\\Form\\Type\\EmpresaSearchType',
             'appbundle\\form\\type\\empresatype' => 'AppBundle\\Form\\Type\\EmpresaType',
         );
         $this->methodMap = array(
@@ -47,6 +48,7 @@ class appDevDebugProjectContainer extends Container
             'AppBundle\\Controller\\EmpresaController' => 'getAppBundle_Controller_EmpresaControllerService',
             'AppBundle\\Form\\Type\\CategoriaEmpresaType' => 'getAppBundle_Form_Type_CategoriaEmpresaTypeService',
             'AppBundle\\Form\\Type\\CategoriaType' => 'getAppBundle_Form_Type_CategoriaTypeService',
+            'AppBundle\\Form\\Type\\EmpresaSearchType' => 'getAppBundle_Form_Type_EmpresaSearchTypeService',
             'AppBundle\\Form\\Type\\EmpresaType' => 'getAppBundle_Form_Type_EmpresaTypeService',
             'annotation_reader' => 'getAnnotationReaderService',
             'annotations.reader' => 'getAnnotations_ReaderService',
@@ -156,6 +158,27 @@ class appDevDebugProjectContainer extends Container
             'form.type_extension.upload.validator' => 'getForm_TypeExtension_Upload_ValidatorService',
             'form.type_guesser.doctrine' => 'getForm_TypeGuesser_DoctrineService',
             'form.type_guesser.validator' => 'getForm_TypeGuesser_ValidatorService',
+            'fos_elastica.alias_processor' => 'getFosElastica_AliasProcessorService',
+            'fos_elastica.client.default' => 'getFosElastica_Client_DefaultService',
+            'fos_elastica.config_manager' => 'getFosElastica_ConfigManagerService',
+            'fos_elastica.data_collector' => 'getFosElastica_DataCollectorService',
+            'fos_elastica.finder.app.empresa' => 'getFosElastica_Finder_App_EmpresaService',
+            'fos_elastica.index.app' => 'getFosElastica_Index_AppService',
+            'fos_elastica.index.app.empresa' => 'getFosElastica_Index_App_EmpresaService',
+            'fos_elastica.index_manager' => 'getFosElastica_IndexManagerService',
+            'fos_elastica.indexable' => 'getFosElastica_IndexableService',
+            'fos_elastica.logger' => 'getFosElastica_LoggerService',
+            'fos_elastica.manager.orm' => 'getFosElastica_Manager_OrmService',
+            'fos_elastica.mapping_builder' => 'getFosElastica_MappingBuilderService',
+            'fos_elastica.object_persister.app.empresa' => 'getFosElastica_ObjectPersister_App_EmpresaService',
+            'fos_elastica.paginator.subscriber' => 'getFosElastica_Paginator_SubscriberService',
+            'fos_elastica.populate_listener' => 'getFosElastica_PopulateListenerService',
+            'fos_elastica.property_accessor' => 'getFosElastica_PropertyAccessorService',
+            'fos_elastica.provider.app.empresa' => 'getFosElastica_Provider_App_EmpresaService',
+            'fos_elastica.provider_registry' => 'getFosElastica_ProviderRegistryService',
+            'fos_elastica.repository_manager' => 'getFosElastica_RepositoryManagerService',
+            'fos_elastica.resetter' => 'getFosElastica_ResetterService',
+            'fos_elastica.slice_fetcher.orm' => 'getFosElastica_SliceFetcher_OrmService',
             'fragment.handler' => 'getFragment_HandlerService',
             'fragment.listener' => 'getFragment_ListenerService',
             'fragment.renderer.esi' => 'getFragment_Renderer_EsiService',
@@ -175,6 +198,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.cache' => 'getMonolog_Logger_CacheService',
             'monolog.logger.console' => 'getMonolog_Logger_ConsoleService',
             'monolog.logger.doctrine' => 'getMonolog_Logger_DoctrineService',
+            'monolog.logger.elastica' => 'getMonolog_Logger_ElasticaService',
             'monolog.logger.event' => 'getMonolog_Logger_EventService',
             'monolog.logger.php' => 'getMonolog_Logger_PhpService',
             'monolog.logger.profiler' => 'getMonolog_Logger_ProfilerService',
@@ -279,6 +303,7 @@ class appDevDebugProjectContainer extends Container
             '2_81965cd44000b5602016f09c7fb5a334e3c2b2031935e3a61f5eef4b0f58a561' => true,
             'AppBundle\\Form\\Type\\CategoriaEmpresaType' => true,
             'AppBundle\\Form\\Type\\CategoriaType' => true,
+            'AppBundle\\Form\\Type\\EmpresaSearchType' => true,
             'AppBundle\\Form\\Type\\EmpresaType' => true,
             'annotations.reader' => true,
             'argument_resolver.default' => true,
@@ -338,6 +363,9 @@ class appDevDebugProjectContainer extends Container
             'doctrine.orm.default_result_cache' => 'doctrine_cache.providers.doctrine.orm.default_result_cache',
             'doctrine.orm.entity_manager' => 'doctrine.orm.default_entity_manager',
             'event_dispatcher' => 'debug.event_dispatcher',
+            'fos_elastica.client' => 'fos_elastica.client.default',
+            'fos_elastica.index' => 'fos_elastica.index.app',
+            'fos_elastica.manager' => 'fos_elastica.manager.orm',
             'mailer' => 'swiftmailer.mailer.default',
             'session.storage' => 'session.storage.native',
             'swiftmailer.mailer' => 'swiftmailer.mailer.default',
@@ -664,6 +692,9 @@ class appDevDebugProjectContainer extends Container
         $instance->addListener('kernel.controller', array(0 => function () {
             return ${($_ = isset($this->services['data_collector.router']) ? $this->services['data_collector.router'] : $this->get('data_collector.router')) && false ?: '_'};
         }, 1 => 'onKernelController'), 0);
+        $instance->addListener('elastica.index.index_post_populate', array(0 => function () {
+            return ${($_ = isset($this->services['fos_elastica.populate_listener']) ? $this->services['fos_elastica.populate_listener'] : $this->get('fos_elastica.populate_listener')) && false ?: '_'};
+        }, 1 => 'onPostIndexPopulate'), -9999);
         $instance->addListener('kernel.response', array(0 => function () {
             return ${($_ = isset($this->services['response_listener']) ? $this->services['response_listener'] : $this->get('response_listener')) && false ?: '_'};
         }, 1 => 'onKernelResponse'), 0);
@@ -867,6 +898,7 @@ class appDevDebugProjectContainer extends Container
 
         $c = new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this);
         $c->addEventListener(array(0 => 'loadClassMetadata'), ${($_ = isset($this->services['doctrine.orm.default_listeners.attach_entity_listeners']) ? $this->services['doctrine.orm.default_listeners.attach_entity_listeners'] : $this->get('doctrine.orm.default_listeners.attach_entity_listeners')) && false ?: '_'});
+        $c->addEventListener(array(0 => 'postPersist', 1 => 'postUpdate', 2 => 'preRemove', 3 => 'postFlush'), new \FOS\ElasticaBundle\Doctrine\Listener(${($_ = isset($this->services['fos_elastica.object_persister.app.empresa']) ? $this->services['fos_elastica.object_persister.app.empresa'] : $this->get('fos_elastica.object_persister.app.empresa')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.indexable']) ? $this->services['fos_elastica.indexable'] : $this->get('fos_elastica.indexable')) && false ?: '_'}, array('identifier' => 'id', 'indexName' => 'app', 'typeName' => 'empresa'), NULL));
 
         return $this->services['doctrine.dbal.default_connection'] = ${($_ = isset($this->services['doctrine.dbal.connection_factory']) ? $this->services['doctrine.dbal.connection_factory'] : $this->get('doctrine.dbal.connection_factory')) && false ?: '_'}->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => NULL, 'dbname' => 'arca_teste', 'user' => 'arca', 'password' => 'teste', 'charset' => 'UTF8', 'driverOptions' => array(), 'defaultTableOptions' => array()), $b, $c, array());
     }
@@ -1046,6 +1078,8 @@ class appDevDebugProjectContainer extends Container
             return ${($_ = isset($this->services['AppBundle\Form\Type\CategoriaEmpresaType']) ? $this->services['AppBundle\Form\Type\CategoriaEmpresaType'] : $this->getAppBundle_Form_Type_CategoriaEmpresaTypeService()) && false ?: '_'};
         }, 'AppBundle\\Form\\Type\\CategoriaType' => function () {
             return ${($_ = isset($this->services['AppBundle\Form\Type\CategoriaType']) ? $this->services['AppBundle\Form\Type\CategoriaType'] : $this->getAppBundle_Form_Type_CategoriaTypeService()) && false ?: '_'};
+        }, 'AppBundle\\Form\\Type\\EmpresaSearchType' => function () {
+            return ${($_ = isset($this->services['AppBundle\Form\Type\EmpresaSearchType']) ? $this->services['AppBundle\Form\Type\EmpresaSearchType'] : $this->getAppBundle_Form_Type_EmpresaSearchTypeService()) && false ?: '_'};
         }, 'AppBundle\\Form\\Type\\EmpresaType' => function () {
             return ${($_ = isset($this->services['AppBundle\Form\Type\EmpresaType']) ? $this->services['AppBundle\Form\Type\EmpresaType'] : $this->getAppBundle_Form_Type_EmpresaTypeService()) && false ?: '_'};
         }, 'Symfony\\Bridge\\Doctrine\\Form\\Type\\EntityType' => function () {
@@ -1507,6 +1541,246 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the public 'fos_elastica.alias_processor' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Index\AliasProcessor
+     */
+    protected function getFosElastica_AliasProcessorService()
+    {
+        return $this->services['fos_elastica.alias_processor'] = new \FOS\ElasticaBundle\Index\AliasProcessor();
+    }
+
+    /**
+     * Gets the public 'fos_elastica.client.default' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Elastica\Client
+     */
+    protected function getFosElastica_Client_DefaultService()
+    {
+        $this->services['fos_elastica.client.default'] = $instance = new \FOS\ElasticaBundle\Elastica\Client(array('connections' => array(0 => array('host' => 'localhost', 'port' => 9200, 'logger' => 'fos_elastica.logger', 'compression' => false, 'headers' => array(), 'curl' => array(), 'retryOnConflict' => 0)), 'connectionStrategy' => 'Simple'), '');
+
+        $instance->setStopwatch(${($_ = isset($this->services['debug.stopwatch']) ? $this->services['debug.stopwatch'] : $this->get('debug.stopwatch', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
+        $instance->setLogger(${($_ = isset($this->services['fos_elastica.logger']) ? $this->services['fos_elastica.logger'] : $this->get('fos_elastica.logger')) && false ?: '_'});
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'fos_elastica.config_manager' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Configuration\ConfigManager
+     */
+    protected function getFosElastica_ConfigManagerService()
+    {
+        return $this->services['fos_elastica.config_manager'] = new \FOS\ElasticaBundle\Configuration\ConfigManager(array(0 => new \FOS\ElasticaBundle\Configuration\Source\ContainerSource(array('app' => array('elasticsearch_name' => 'app', 'reference' => ${($_ = isset($this->services['fos_elastica.index.app']) ? $this->services['fos_elastica.index.app'] : $this->get('fos_elastica.index.app')) && false ?: '_'}, 'name' => 'app', 'settings' => array(), 'type_prototype' => array(), 'use_alias' => false, 'types' => array('empresa' => array('name' => 'empresa', 'mapping' => array('dynamic_templates' => array(), 'properties' => array('id' => array('type' => 'integer'), 'titulo' => array(), 'telefone' => array(), 'endereco' => array(), 'cep' => array(), 'cidade' => array(), 'estado' => array(), 'descricao' => array())), 'config' => array('persistence' => array('driver' => 'orm', 'model' => 'ArcaSolutionsTeste\\AppBundle\\Entity\\Empresa', 'finder' => array(), 'provider' => array('batch_size' => 100, 'clear_object_manager' => true, 'debug_logging' => true, 'query_builder_method' => 'createQueryBuilder'), 'listener' => array('insert' => true, 'update' => true, 'delete' => true, 'flush' => true, 'defer' => false, 'logger' => false), 'identifier' => 'id', 'elastica_to_model_transformer' => array('hints' => array(), 'hydrate' => true, 'ignore_missing' => false, 'query_builder_method' => 'createQueryBuilder'), 'model_to_elastica_transformer' => array(), 'persister' => array()), 'serializer' => array('groups' => array(), 'serialize_null' => false), 'analyzer' => NULL, 'search_analyzer' => NULL, 'dynamic' => NULL, 'date_detection' => NULL, 'dynamic_date_formats' => array(), 'numeric_detection' => NULL))))))));
+    }
+
+    /**
+     * Gets the public 'fos_elastica.data_collector' shared service.
+     *
+     * @return \FOS\ElasticaBundle\DataCollector\ElasticaDataCollector
+     */
+    protected function getFosElastica_DataCollectorService()
+    {
+        return $this->services['fos_elastica.data_collector'] = new \FOS\ElasticaBundle\DataCollector\ElasticaDataCollector(${($_ = isset($this->services['fos_elastica.logger']) ? $this->services['fos_elastica.logger'] : $this->get('fos_elastica.logger')) && false ?: '_'});
+    }
+
+    /**
+     * Gets the public 'fos_elastica.finder.app.empresa' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Finder\TransformedFinder
+     */
+    protected function getFosElastica_Finder_App_EmpresaService()
+    {
+        $a = new \FOS\ElasticaBundle\Doctrine\ORM\ElasticaToModelTransformer(${($_ = isset($this->services['doctrine']) ? $this->services['doctrine'] : $this->get('doctrine')) && false ?: '_'}, 'ArcaSolutionsTeste\\AppBundle\\Entity\\Empresa', array('hints' => array(), 'hydrate' => true, 'ignore_missing' => false, 'query_builder_method' => 'createQueryBuilder', 'identifier' => 'id'));
+        $a->setPropertyAccessor(${($_ = isset($this->services['fos_elastica.property_accessor']) ? $this->services['fos_elastica.property_accessor'] : $this->get('fos_elastica.property_accessor')) && false ?: '_'});
+
+        return $this->services['fos_elastica.finder.app.empresa'] = new \FOS\ElasticaBundle\Finder\TransformedFinder(${($_ = isset($this->services['fos_elastica.index.app.empresa']) ? $this->services['fos_elastica.index.app.empresa'] : $this->get('fos_elastica.index.app.empresa')) && false ?: '_'}, $a);
+    }
+
+    /**
+     * Gets the public 'fos_elastica.index.app' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Elastica\Index
+     */
+    protected function getFosElastica_Index_AppService()
+    {
+        return $this->services['fos_elastica.index.app'] = ${($_ = isset($this->services['fos_elastica.client.default']) ? $this->services['fos_elastica.client.default'] : $this->get('fos_elastica.client.default')) && false ?: '_'}->getIndex('app');
+    }
+
+    /**
+     * Gets the public 'fos_elastica.index.app.empresa' shared service.
+     *
+     * @return \Elastica\Type
+     */
+    protected function getFosElastica_Index_App_EmpresaService()
+    {
+        return $this->services['fos_elastica.index.app.empresa'] = ${($_ = isset($this->services['fos_elastica.index.app']) ? $this->services['fos_elastica.index.app'] : $this->get('fos_elastica.index.app')) && false ?: '_'}->getType('empresa');
+    }
+
+    /**
+     * Gets the public 'fos_elastica.index_manager' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Index\IndexManager
+     */
+    protected function getFosElastica_IndexManagerService()
+    {
+        $a = ${($_ = isset($this->services['fos_elastica.index.app']) ? $this->services['fos_elastica.index.app'] : $this->get('fos_elastica.index.app')) && false ?: '_'};
+
+        return $this->services['fos_elastica.index_manager'] = new \FOS\ElasticaBundle\Index\IndexManager(array('app' => $a), $a);
+    }
+
+    /**
+     * Gets the public 'fos_elastica.indexable' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Provider\Indexable
+     */
+    protected function getFosElastica_IndexableService()
+    {
+        $this->services['fos_elastica.indexable'] = $instance = new \FOS\ElasticaBundle\Provider\Indexable(array());
+
+        $instance->setContainer($this);
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'fos_elastica.logger' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Logger\ElasticaLogger
+     */
+    protected function getFosElastica_LoggerService()
+    {
+        return $this->services['fos_elastica.logger'] = new \FOS\ElasticaBundle\Logger\ElasticaLogger(${($_ = isset($this->services['monolog.logger.elastica']) ? $this->services['monolog.logger.elastica'] : $this->get('monolog.logger.elastica', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, true);
+    }
+
+    /**
+     * Gets the public 'fos_elastica.manager.orm' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Doctrine\RepositoryManager
+     */
+    protected function getFosElastica_Manager_OrmService()
+    {
+        $this->services['fos_elastica.manager.orm'] = $instance = new \FOS\ElasticaBundle\Doctrine\RepositoryManager(${($_ = isset($this->services['doctrine']) ? $this->services['doctrine'] : $this->get('doctrine')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.repository_manager']) ? $this->services['fos_elastica.repository_manager'] : $this->get('fos_elastica.repository_manager')) && false ?: '_'});
+
+        $instance->addEntity('ArcaSolutionsTeste\\AppBundle\\Entity\\Empresa', 'app/empresa');
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'fos_elastica.mapping_builder' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Index\MappingBuilder
+     */
+    protected function getFosElastica_MappingBuilderService()
+    {
+        return $this->services['fos_elastica.mapping_builder'] = new \FOS\ElasticaBundle\Index\MappingBuilder();
+    }
+
+    /**
+     * Gets the public 'fos_elastica.object_persister.app.empresa' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Persister\ObjectPersister
+     */
+    protected function getFosElastica_ObjectPersister_App_EmpresaService()
+    {
+        $a = new \FOS\ElasticaBundle\Transformer\ModelToElasticaAutoTransformer(array('identifier' => 'id'), ${($_ = isset($this->services['debug.event_dispatcher']) ? $this->services['debug.event_dispatcher'] : $this->get('debug.event_dispatcher')) && false ?: '_'});
+        $a->setPropertyAccessor(${($_ = isset($this->services['fos_elastica.property_accessor']) ? $this->services['fos_elastica.property_accessor'] : $this->get('fos_elastica.property_accessor')) && false ?: '_'});
+
+        return $this->services['fos_elastica.object_persister.app.empresa'] = new \FOS\ElasticaBundle\Persister\ObjectPersister(${($_ = isset($this->services['fos_elastica.index.app.empresa']) ? $this->services['fos_elastica.index.app.empresa'] : $this->get('fos_elastica.index.app.empresa')) && false ?: '_'}, $a, 'ArcaSolutionsTeste\\AppBundle\\Entity\\Empresa', array('id' => array('type' => 'integer'), 'titulo' => array(), 'telefone' => array(), 'endereco' => array(), 'cep' => array(), 'cidade' => array(), 'estado' => array(), 'descricao' => array()));
+    }
+
+    /**
+     * Gets the public 'fos_elastica.paginator.subscriber' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Subscriber\PaginateElasticaQuerySubscriber
+     */
+    protected function getFosElastica_Paginator_SubscriberService()
+    {
+        return $this->services['fos_elastica.paginator.subscriber'] = new \FOS\ElasticaBundle\Subscriber\PaginateElasticaQuerySubscriber(${($_ = isset($this->services['request_stack']) ? $this->services['request_stack'] : $this->get('request_stack')) && false ?: '_'});
+    }
+
+    /**
+     * Gets the public 'fos_elastica.populate_listener' shared service.
+     *
+     * @return \FOS\ElasticaBundle\EventListener\PopulateListener
+     */
+    protected function getFosElastica_PopulateListenerService()
+    {
+        return $this->services['fos_elastica.populate_listener'] = new \FOS\ElasticaBundle\EventListener\PopulateListener(${($_ = isset($this->services['fos_elastica.resetter']) ? $this->services['fos_elastica.resetter'] : $this->get('fos_elastica.resetter')) && false ?: '_'});
+    }
+
+    /**
+     * Gets the public 'fos_elastica.property_accessor' shared service.
+     *
+     * @return \Symfony\Component\PropertyAccess\PropertyAccessor
+     */
+    protected function getFosElastica_PropertyAccessorService()
+    {
+        return $this->services['fos_elastica.property_accessor'] = new \Symfony\Component\PropertyAccess\PropertyAccessor(false, false);
+    }
+
+    /**
+     * Gets the public 'fos_elastica.provider.app.empresa' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Doctrine\ORM\Provider
+     */
+    protected function getFosElastica_Provider_App_EmpresaService()
+    {
+        return $this->services['fos_elastica.provider.app.empresa'] = new \FOS\ElasticaBundle\Doctrine\ORM\Provider(${($_ = isset($this->services['fos_elastica.object_persister.app.empresa']) ? $this->services['fos_elastica.object_persister.app.empresa'] : $this->get('fos_elastica.object_persister.app.empresa')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.indexable']) ? $this->services['fos_elastica.indexable'] : $this->get('fos_elastica.indexable')) && false ?: '_'}, 'ArcaSolutionsTeste\\AppBundle\\Entity\\Empresa', array('batch_size' => 100, 'clear_object_manager' => true, 'debug_logging' => true, 'query_builder_method' => 'createQueryBuilder', 'indexName' => 'app', 'typeName' => 'empresa'), ${($_ = isset($this->services['doctrine']) ? $this->services['doctrine'] : $this->get('doctrine')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.slice_fetcher.orm']) ? $this->services['fos_elastica.slice_fetcher.orm'] : $this->get('fos_elastica.slice_fetcher.orm')) && false ?: '_'});
+    }
+
+    /**
+     * Gets the public 'fos_elastica.provider_registry' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Provider\ProviderRegistry
+     */
+    protected function getFosElastica_ProviderRegistryService()
+    {
+        $this->services['fos_elastica.provider_registry'] = $instance = new \FOS\ElasticaBundle\Provider\ProviderRegistry();
+
+        $instance->setContainer($this);
+        $instance->addProvider('app', 'empresa', 'fos_elastica.provider.app.empresa');
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'fos_elastica.repository_manager' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Manager\RepositoryManager
+     */
+    protected function getFosElastica_RepositoryManagerService()
+    {
+        $this->services['fos_elastica.repository_manager'] = $instance = new \FOS\ElasticaBundle\Manager\RepositoryManager();
+
+        $instance->addType('app/empresa', ${($_ = isset($this->services['fos_elastica.finder.app.empresa']) ? $this->services['fos_elastica.finder.app.empresa'] : $this->get('fos_elastica.finder.app.empresa')) && false ?: '_'});
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'fos_elastica.resetter' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Index\Resetter
+     */
+    protected function getFosElastica_ResetterService()
+    {
+        return $this->services['fos_elastica.resetter'] = new \FOS\ElasticaBundle\Index\Resetter(${($_ = isset($this->services['fos_elastica.config_manager']) ? $this->services['fos_elastica.config_manager'] : $this->get('fos_elastica.config_manager')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.index_manager']) ? $this->services['fos_elastica.index_manager'] : $this->get('fos_elastica.index_manager')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.alias_processor']) ? $this->services['fos_elastica.alias_processor'] : $this->get('fos_elastica.alias_processor')) && false ?: '_'}, ${($_ = isset($this->services['fos_elastica.mapping_builder']) ? $this->services['fos_elastica.mapping_builder'] : $this->get('fos_elastica.mapping_builder')) && false ?: '_'}, ${($_ = isset($this->services['debug.event_dispatcher']) ? $this->services['debug.event_dispatcher'] : $this->get('debug.event_dispatcher')) && false ?: '_'});
+    }
+
+    /**
+     * Gets the public 'fos_elastica.slice_fetcher.orm' shared service.
+     *
+     * @return \FOS\ElasticaBundle\Doctrine\ORM\SliceFetcher
+     */
+    protected function getFosElastica_SliceFetcher_OrmService()
+    {
+        return $this->services['fos_elastica.slice_fetcher.orm'] = new \FOS\ElasticaBundle\Doctrine\ORM\SliceFetcher();
+    }
+
+    /**
      * Gets the public 'fragment.handler' shared service.
      *
      * @return \Symfony\Component\HttpKernel\DependencyInjection\LazyLoadingFragmentHandler
@@ -1744,6 +2018,23 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the public 'monolog.logger.elastica' shared service.
+     *
+     * @return \Symfony\Bridge\Monolog\Logger
+     */
+    protected function getMonolog_Logger_ElasticaService()
+    {
+        $this->services['monolog.logger.elastica'] = $instance = new \Symfony\Bridge\Monolog\Logger('elastica');
+
+        $instance->pushProcessor(${($_ = isset($this->services['debug.log_processor']) ? $this->services['debug.log_processor'] : $this->getDebug_LogProcessorService()) && false ?: '_'});
+        $instance->pushHandler(${($_ = isset($this->services['monolog.handler.server_log']) ? $this->services['monolog.handler.server_log'] : $this->get('monolog.handler.server_log')) && false ?: '_'});
+        $instance->pushHandler(${($_ = isset($this->services['monolog.handler.console']) ? $this->services['monolog.handler.console'] : $this->get('monolog.handler.console')) && false ?: '_'});
+        $instance->pushHandler(${($_ = isset($this->services['monolog.handler.main']) ? $this->services['monolog.handler.main'] : $this->get('monolog.handler.main')) && false ?: '_'});
+
+        return $instance;
+    }
+
+    /**
      * Gets the public 'monolog.logger.event' shared service.
      *
      * @return \Symfony\Bridge\Monolog\Logger
@@ -1902,6 +2193,7 @@ class appDevDebugProjectContainer extends Container
         $instance->add($d);
         $instance->add(new \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector($this));
         $instance->add(${($_ = isset($this->services['data_collector.dump']) ? $this->services['data_collector.dump'] : $this->get('data_collector.dump')) && false ?: '_'});
+        $instance->add(${($_ = isset($this->services['fos_elastica.data_collector']) ? $this->services['fos_elastica.data_collector'] : $this->get('fos_elastica.data_collector')) && false ?: '_'});
         $instance->add($e);
 
         return $instance;
@@ -2082,7 +2374,7 @@ class appDevDebugProjectContainer extends Container
 
         $f = new \Symfony\Component\Security\Http\AccessMap();
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($f, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'main', $a, ${($_ = isset($this->services['debug.event_dispatcher']) ? $this->services['debug.event_dispatcher'] : $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, $c), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '59a427cbb2eb06.37459496', $a, $d), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, ${($_ = isset($this->services['debug.security.access.decision_manager']) ? $this->services['debug.security.access.decision_manager'] : $this->getDebug_Security_Access_DecisionManagerService()) && false ?: '_'}, $f, $d)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $c, new \Symfony\Component\Security\Http\HttpUtils($e, $e), 'main', NULL, NULL, NULL, $a, false), new \Symfony\Bundle\SecurityBundle\Security\FirewallConfig('main', 'security.user_checker', NULL, true, false, 'security.user.provider.concrete.in_memory', 'main', NULL, NULL, NULL, array(0 => 'anonymous')));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($f, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'main', $a, ${($_ = isset($this->services['debug.event_dispatcher']) ? $this->services['debug.event_dispatcher'] : $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, $c), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '59a47f813b53f0.89226622', $a, $d), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, ${($_ = isset($this->services['debug.security.access.decision_manager']) ? $this->services['debug.security.access.decision_manager'] : $this->getDebug_Security_Access_DecisionManagerService()) && false ?: '_'}, $f, $d)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $c, new \Symfony\Component\Security\Http\HttpUtils($e, $e), 'main', NULL, NULL, NULL, $a, false), new \Symfony\Bundle\SecurityBundle\Security\FirewallConfig('main', 'security.user_checker', NULL, true, false, 'security.user.provider.concrete.in_memory', 'main', NULL, NULL, NULL, array(0 => 'anonymous')));
     }
 
     /**
@@ -2582,6 +2874,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views'), 'Twig');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/swiftmailer-bundle/Resources/views'), 'Swiftmailer');
         $instance->addPath(($this->targetDirs[3].'/vendor/doctrine/doctrine-bundle/Resources/views'), 'Doctrine');
+        $instance->addPath(($this->targetDirs[3].'/vendor/friendsofsymfony/elastica-bundle/Resources/views'), 'FOSElastica');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views'), 'Debug');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views'), 'WebProfiler');
         $instance->addPath(($this->targetDirs[3].'/app/Resources/views'));
@@ -2746,7 +3039,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getWebProfiler_Controller_ProfilerService()
     {
-        return $this->services['web_profiler.controller.profiler'] = new \Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController(${($_ = isset($this->services['router']) ? $this->services['router'] : $this->get('router', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, ${($_ = isset($this->services['profiler']) ? $this->services['profiler'] : $this->get('profiler', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, ${($_ = isset($this->services['twig']) ? $this->services['twig'] : $this->get('twig')) && false ?: '_'}, array('data_collector.request' => array(0 => 'request', 1 => '@WebProfiler/Collector/request.html.twig'), 'data_collector.time' => array(0 => 'time', 1 => '@WebProfiler/Collector/time.html.twig'), 'data_collector.memory' => array(0 => 'memory', 1 => '@WebProfiler/Collector/memory.html.twig'), 'data_collector.ajax' => array(0 => 'ajax', 1 => '@WebProfiler/Collector/ajax.html.twig'), 'data_collector.form' => array(0 => 'form', 1 => '@WebProfiler/Collector/form.html.twig'), 'data_collector.exception' => array(0 => 'exception', 1 => '@WebProfiler/Collector/exception.html.twig'), 'data_collector.logger' => array(0 => 'logger', 1 => '@WebProfiler/Collector/logger.html.twig'), 'data_collector.events' => array(0 => 'events', 1 => '@WebProfiler/Collector/events.html.twig'), 'data_collector.router' => array(0 => 'router', 1 => '@WebProfiler/Collector/router.html.twig'), 'data_collector.cache' => array(0 => 'cache', 1 => '@WebProfiler/Collector/cache.html.twig'), 'data_collector.security' => array(0 => 'security', 1 => '@Security/Collector/security.html.twig'), 'data_collector.twig' => array(0 => 'twig', 1 => '@WebProfiler/Collector/twig.html.twig'), 'data_collector.doctrine' => array(0 => 'db', 1 => '@Doctrine/Collector/db.html.twig'), 'swiftmailer.data_collector' => array(0 => 'swiftmailer', 1 => '@Swiftmailer/Collector/swiftmailer.html.twig'), 'data_collector.dump' => array(0 => 'dump', 1 => '@Debug/Profiler/dump.html.twig'), 'data_collector.config' => array(0 => 'config', 1 => '@WebProfiler/Collector/config.html.twig')), 'bottom', ${($_ = isset($this->services['web_profiler.csp.handler']) ? $this->services['web_profiler.csp.handler'] : $this->getWebProfiler_Csp_HandlerService()) && false ?: '_'}, $this->targetDirs[3]);
+        return $this->services['web_profiler.controller.profiler'] = new \Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController(${($_ = isset($this->services['router']) ? $this->services['router'] : $this->get('router', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, ${($_ = isset($this->services['profiler']) ? $this->services['profiler'] : $this->get('profiler', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'}, ${($_ = isset($this->services['twig']) ? $this->services['twig'] : $this->get('twig')) && false ?: '_'}, array('data_collector.request' => array(0 => 'request', 1 => '@WebProfiler/Collector/request.html.twig'), 'data_collector.time' => array(0 => 'time', 1 => '@WebProfiler/Collector/time.html.twig'), 'data_collector.memory' => array(0 => 'memory', 1 => '@WebProfiler/Collector/memory.html.twig'), 'data_collector.ajax' => array(0 => 'ajax', 1 => '@WebProfiler/Collector/ajax.html.twig'), 'data_collector.form' => array(0 => 'form', 1 => '@WebProfiler/Collector/form.html.twig'), 'data_collector.exception' => array(0 => 'exception', 1 => '@WebProfiler/Collector/exception.html.twig'), 'data_collector.logger' => array(0 => 'logger', 1 => '@WebProfiler/Collector/logger.html.twig'), 'data_collector.events' => array(0 => 'events', 1 => '@WebProfiler/Collector/events.html.twig'), 'data_collector.router' => array(0 => 'router', 1 => '@WebProfiler/Collector/router.html.twig'), 'data_collector.cache' => array(0 => 'cache', 1 => '@WebProfiler/Collector/cache.html.twig'), 'data_collector.security' => array(0 => 'security', 1 => '@Security/Collector/security.html.twig'), 'data_collector.twig' => array(0 => 'twig', 1 => '@WebProfiler/Collector/twig.html.twig'), 'data_collector.doctrine' => array(0 => 'db', 1 => '@Doctrine/Collector/db.html.twig'), 'swiftmailer.data_collector' => array(0 => 'swiftmailer', 1 => '@Swiftmailer/Collector/swiftmailer.html.twig'), 'data_collector.dump' => array(0 => 'dump', 1 => '@Debug/Profiler/dump.html.twig'), 'fos_elastica.data_collector' => array(0 => 'elastica', 1 => 'FOSElasticaBundle:Collector:elastica'), 'data_collector.config' => array(0 => 'config', 1 => '@WebProfiler/Collector/config.html.twig')), 'bottom', ${($_ = isset($this->services['web_profiler.csp.handler']) ? $this->services['web_profiler.csp.handler'] : $this->getWebProfiler_Csp_HandlerService()) && false ?: '_'}, $this->targetDirs[3]);
     }
 
     /**
@@ -2807,6 +3100,16 @@ class appDevDebugProjectContainer extends Container
     protected function getAppBundle_Form_Type_CategoriaTypeService()
     {
         return $this->services['AppBundle\Form\Type\CategoriaType'] = new \AppBundle\Form\Type\CategoriaType();
+    }
+
+    /**
+     * Gets the private 'AppBundle\Form\Type\EmpresaSearchType' shared autowired service.
+     *
+     * @return \AppBundle\Form\Type\EmpresaSearchType
+     */
+    protected function getAppBundle_Form_Type_EmpresaSearchTypeService()
+    {
+        return $this->services['AppBundle\Form\Type\EmpresaSearchType'] = new \AppBundle\Form\Type\EmpresaSearchType();
     }
 
     /**
@@ -2913,7 +3216,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCache_Annotations_RecorderInnerService($lazyLoad = true)
     {
-        return $this->services['cache.annotations.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('DNJ7NQ8-j1', 0, 'MIgdPC4t5RkyTMWj-IzIkJ', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
+        return $this->services['cache.annotations.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('DNJ7NQ8-j1', 0, 'DtETZ-+B9hvul6SctOJTCB', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
     }
 
     /**
@@ -2939,7 +3242,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCache_Serializer_RecorderInnerService($lazyLoad = true)
     {
-        return $this->services['cache.serializer.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('owbvhkf1kp', 0, 'MIgdPC4t5RkyTMWj-IzIkJ', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
+        return $this->services['cache.serializer.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('owbvhkf1kp', 0, 'DtETZ-+B9hvul6SctOJTCB', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
     }
 
     /**
@@ -2949,7 +3252,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCache_System_RecorderInnerService($lazyLoad = true)
     {
-        return $this->services['cache.system.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('Y-nGk2j-wp', 0, 'MIgdPC4t5RkyTMWj-IzIkJ', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
+        return $this->services['cache.system.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('Y-nGk2j-wp', 0, 'DtETZ-+B9hvul6SctOJTCB', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
     }
 
     /**
@@ -2969,7 +3272,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCache_Validator_RecorderInnerService($lazyLoad = true)
     {
-        return $this->services['cache.validator.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('qGhNsHuamc', 0, 'MIgdPC4t5RkyTMWj-IzIkJ', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
+        return $this->services['cache.validator.recorder_inner'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('qGhNsHuamc', 0, 'DtETZ-+B9hvul6SctOJTCB', (__DIR__.'/pools'), ${($_ = isset($this->services['monolog.logger.cache']) ? $this->services['monolog.logger.cache'] : $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE)) && false ?: '_'});
     }
 
     /**
@@ -3219,7 +3522,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_Provider_Anonymous_MainService()
     {
-        return $this->services['security.authentication.provider.anonymous.main'] = new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('59a427cbb2eb06.37459496');
+        return $this->services['security.authentication.provider.anonymous.main'] = new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('59a47f813b53f0.89226622');
     }
 
     /**
@@ -3464,6 +3767,11 @@ class appDevDebugProjectContainer extends Container
                     'path' => ($this->targetDirs[3].'/src/AppBundle'),
                     'namespace' => 'AppBundle',
                 ),
+                'FOSElasticaBundle' => array(
+                    'parent' => NULL,
+                    'path' => ($this->targetDirs[3].'/vendor/friendsofsymfony/elastica-bundle'),
+                    'namespace' => 'FOS\\ElasticaBundle',
+                ),
                 'DebugBundle' => array(
                     'parent' => NULL,
                     'path' => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle'),
@@ -3520,6 +3828,7 @@ class appDevDebugProjectContainer extends Container
                 'DoctrineBundle' => 'Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle',
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'AppBundle' => 'AppBundle\\AppBundle',
+                'FOSElasticaBundle' => 'FOS\\ElasticaBundle\\FOSElasticaBundle',
                 'DebugBundle' => 'Symfony\\Bundle\\DebugBundle\\DebugBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -3538,6 +3847,8 @@ class appDevDebugProjectContainer extends Container
             'mailer_user' => NULL,
             'mailer_password' => NULL,
             'secret' => 'fc67968f424e497a979581d205dcc0e579d1d0b7',
+            'elastic_host' => 'localhost',
+            'elastic_port' => 9200,
             'locale' => 'en',
             'fragment.renderer.hinclude.global_template' => NULL,
             'fragment.path' => '/_fragment',
@@ -3775,6 +4086,8 @@ class appDevDebugProjectContainer extends Container
             'sensio_framework_extra.converter.doctrine.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
             'sensio_framework_extra.converter.datetime.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
             'sensio_framework_extra.view.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+            'fos_elastica.property_accessor.magiccall' => false,
+            'fos_elastica.property_accessor.throwexceptiononinvalidindex' => false,
             'web_profiler.debug_toolbar.position' => 'bottom',
             'web_profiler.debug_toolbar.intercept_redirects' => false,
             'web_profiler.debug_toolbar.mode' => 2,
@@ -3838,6 +4151,10 @@ class appDevDebugProjectContainer extends Container
                 'data_collector.dump' => array(
                     0 => 'dump',
                     1 => '@Debug/Profiler/dump.html.twig',
+                ),
+                'fos_elastica.data_collector' => array(
+                    0 => 'elastica',
+                    1 => 'FOSElasticaBundle:Collector:elastica',
                 ),
                 'data_collector.config' => array(
                     0 => 'config',

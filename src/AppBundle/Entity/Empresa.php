@@ -20,7 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="empresa")
  * @UniqueEntity(fields="titulo", message="Empresa já existe")
+ * @Search(repositoryClass="ArcaSolutionsTeste\AppBundle\Entity\SearchRepository\EmpresaRepository")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="ArcaSolutionsTeste\AppBundle\Entity\Repository\EmpresaRepository")
  */
 class Empresa
 {
@@ -212,8 +214,6 @@ class Empresa
     function setCategoria($categoria) {
         $this->categoria = $categoria;
     }
-
-
 
 }
 
